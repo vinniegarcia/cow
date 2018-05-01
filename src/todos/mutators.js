@@ -1,4 +1,4 @@
-import { Consumer, createMutator } from '../app-state/';
+import { createMutator } from '../app-state/';
 import { defaultTodo } from './data';
 
 export const onDone = todo => createMutator((draft, e) => {
@@ -27,3 +27,7 @@ export const onChange = attr => createMutator((draft, e) => {
     }
     draft.editingTodo[attr] = attributeValue;
 });
+
+export const onDelete = todo => createMutator((draft, e) => {
+    draft.todos[todo.id].isDeleted = true;
+})

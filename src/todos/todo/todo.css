@@ -2,7 +2,7 @@ label {
     display: block;
 }
 
-.editor {
+.editor, .del {
     padding: 5px;
     display: inline-block;
     cursor: pointer;

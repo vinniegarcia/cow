@@ -1,7 +1,7 @@
 import React from 'react';
-import { Consumer, createMutator } from '../../app-state/';
+import { Consumer } from '../../app-state/';
 import TodoForm from '../form/';
-import { defaultTodo } from '../data';
+import { FadeIn } from '../animation/faders';
 import { onCreate, onCancel, onChange, openNewForm } from './mutators';
 
 const getNewTodoData = state => ({
@@ -14,18 +14,34 @@ const NewTodo = () => (
         {
             ({pendingTodo, isNewTodoOpen}) => {
                 if (!isNewTodoOpen) {
-                    return <button onClick={openNewForm}>+ Add Todo</button>
+                    return (
+                        <FadeIn>
+                        {
+                            ({opacity}) => (
+                                <div style={{opacity, height: '200px'}}>
+                                    <button onClick={openNewForm}>+ Add Todo</button>
+                                </div>
+                            )
+                        }
+                        </FadeIn>
+                    )
                 }
                 return (
-                    <div id="new-todo-container">
-                        <TodoForm 
-                            todo={pendingTodo}
-                            onSave={onCreate}
-                            onChange={onChange}
-                            onCancel={onCancel}>
-                            <h2>New Todo</h2>
-                        </TodoForm>
-                    </div>
+                    <FadeIn>
+                    {
+                        ({opacity}) => (
+                            <div id="new-todo-container" style={{opacity}}>
+                                <TodoForm 
+                                    todo={pendingTodo}
+                                    onSave={onCreate}
+                                    onChange={onChange}
+                                    onCancel={onCancel}>
+                                    <h2>New Todo</h2>
+                                </TodoForm>
+                            </div>
+                        )
+                    }
+                    </FadeIn>
                 )
             
             }
