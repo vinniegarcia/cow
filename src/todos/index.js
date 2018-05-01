@@ -1,30 +1,36 @@
 import React from 'react';
 import { Consumer } from '../app-state/';
-import Todo from './todo';
-import TodoForm from './todo-form';
+import Todo from './todo/';
+import TodoForm from './form/';
+import { onDone, onEdit, onCancel, onSave, onChange } from './mutators';
 
-const selector = state => Object.keys(state.todos).map(key => state.todos[key])
+const mapTodos = state => Object.keys(state.todos)
+    .map(key => state.todos[key])
 
 const Todos = () => (
-    <Consumer selector={selector}>
+    <Consumer selector={mapTodos}>
         {
             (todos, mutate) => {
-                const onDone = todo => e => mutate(draft => {
-                    draft.todos[todo.id].done = e.target.checked;
-                });
-                const onEdit = todo => e => mutate(draft => {
-                    draft.todos[todo.id].isEditing = true;
-                });
-                const onCancel = todo => e => mutate(draft => {
-                    draft.todos[todo.id].isEditing = false;
-                });
                 return (
                     <div className="todo-items-container">
-                        {todos.filter(todo => !todo.deleted).map(todo => {
-                            return todo.isEditing ? 
-                                <TodoForm {...todo} onCancel={onCancel(todo)} /> : 
-                                <Todo todo={todo} onDone={onDone(todo)} onEdit={onEdit(todo)} />
-                        })}
+                        {todos
+                            .filter(todo => !todo.isDeleted)
+                            .map(todo => {
+                                return todo.isEditing ? 
+                                    <TodoForm 
+                                        key={`todo-${todo.id}`}
+                                        todo={todo} 
+                                        onSave={onSave(todo)}
+                                        onChange={onChange}
+                                        onCancel={onCancel(todo)} /> : 
+                                    <Todo 
+                                        key={`todo-${todo.id}`}
+                                        todo={todo} 
+                                        onDone={onDone(todo)} 
+                                        onEdit={onEdit(todo)} 
+                                    />
+                            })
+                        }
                     </div>
                 )
             }
